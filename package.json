@@ -37,7 +37,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://112.53.68.86:9999/"
+        "url": "http://112.53.68.85:6543/"
       }
     ],
     "nsis": {
