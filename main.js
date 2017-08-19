@@ -1,7 +1,7 @@
 // This is free and unencumbered software released into the public domain.
 // See LICENSE for details
 
-const {app, BrowserWindow, Menu, protocol, ipcMain} = require('electron');
+const {app, BrowserWindow, Menu, protocol, ipcMain,dialog} = require('electron');
 const log = require('electron-log');
 const {autoUpdater} = require("electron-updater");
 
@@ -58,13 +58,21 @@ function sendStatusToWindow(text) {
   log.info(text);
   win.webContents.send('message', text);
 }
+
+//传递软件更新进度
+function sendUpdateInfoStatusToWindow(text) {
+  log.info(text);
+  win.webContents.send('updateMessage', text);
+}
+
 function createDefaultWindow() {
-  win = new BrowserWindow();
-  win.webContents.openDevTools();
+  win = new BrowserWindow({width: 1280, height: 900});
+  //win.maximize();
+  //win.webContents.openDevTools();
   win.on('closed', () => {
     win = null;
   });
-  win.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`);
+  win.loadURL(`file://${__dirname}/index.html#v${app.getVersion()}`);
   return win;
 }
 autoUpdater.on('checking-for-update', () => {
@@ -80,10 +88,13 @@ autoUpdater.on('error', (err) => {
   sendStatusToWindow('Error in auto-updater.');
 })
 autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  sendStatusToWindow(log_message);
+  //下载速度
+  let log_message = (progressObj.bytesPerSecond/1024.0).toFixed(2);
+  //下载进度
+  log_message = log_message + '-' + (progressObj.percent).toFixed(2);
+  //软件大小
+  log_message = log_message + '-'+ (progressObj.total/1024.0/1024.0).toFixed(2);
+  sendUpdateInfoStatusToWindow(log_message);
 })
 autoUpdater.on('update-downloaded', (info) => {
   sendStatusToWindow('Update downloaded; will install in 5 seconds');
@@ -126,9 +137,15 @@ autoUpdater.on('update-downloaded', (info) => {
   // You could call autoUpdater.quitAndInstall(); immediately
   setTimeout(function() {
     autoUpdater.quitAndInstall();  
-  }, 5000)
+  }, 5000);
 })
 
 app.on('ready', function()  {
   autoUpdater.checkForUpdates();
+  //showVersion  
+  setTimeout(function(){
+    win.webContents.send('showVersion', app.getVersion());
+  },3000);
 });
+
+

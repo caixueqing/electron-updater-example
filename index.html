@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>diandou demo</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+    .mymargin {
+        margin-left: 5px;
+        margin-top: 5px;
+    }
+
+    .bs-example {
+        margin-right: 0;
+        margin-left: 0;
+        background-color: #fff;
+        border-color: #ddd;
+        border-width: 1px;
+        border-radius: 4px 4px 0 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <div class="alert alert-info mymargin" style="width: 600px" role="alert">当前版本: <span id="version"></span></div>
+        <!-- <div class="jumbotron mymargin">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" id="check_version_btn">
+                    检查更新
+                </button>
+        </div> -->
+        <div class="panel panel-primary mymargin" style="width: 600px">
+            <div class="panel-heading">
+                <h3 class="panel-title">串口测试</h3>
+            </div>
+            <div class="panel-body">
+                <div class="input-group mymargin col-lg-6">
+                    <span class="input-group-addon" id="basic-addon1">串口</span>
+                    <input type="text" class="form-control" placeholder="COM3" id="serialport" aria-describedby="basic-addon1">
+                </div>
+                <div class="mymargin">
+                    <button id="open-serialport" type="button" class="btn btn-info">打开串口</button>
+                    <button id="close-serialport" type="button" class="btn btn-info">关闭串口</button>
+                </div>
+                <div class="alert alert-success mymargin" role="alert" id="serialport_status">串口状态：</div>
+                <div class="input-group mymargin col-lg-10">
+                    <span class="input-group-addon" id="basic-addon1">串口接收到的数据</span>
+                    <input type="text" class="form-control" placeholder="" id="serialport-recdata" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class="panel-body" id="serialPortData"></div>
+        </div>
+        <div class="panel panel-primary mymargin" style="width: 600px">
+            <div class="panel-heading">
+                <h3 class="panel-title">测试http请求</h3>
+            </div>
+            <div class="panel-body">
+                <div class="mymargin">
+                    <button id="send-http-request" type="button" class="btn btn-info">发送http请求</button>
+                </div>
+                <div id="httpRecData"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="updateSoftModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">检测软件更新</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-info">发现新版本，正在下载...   速度：
+                    <span id="downloadSpeed">0.00kb/s</span> 
+                    <span id="exeSize" class="pull-right">0.00M</span></p>
+                    <div class="progress">
+                        <div class="progress-bar" id="downpbar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+                            0%
+                        </div>
+
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.min');
+</script>
+<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script>
+// You can also require other files to run in this process
+require('./renderer.js')
+</script>
+
+</html>
